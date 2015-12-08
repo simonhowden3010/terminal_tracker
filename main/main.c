@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <curses.h>
-
+#include <unistd.h>
 #include "parent.h"
 
 void init() {
@@ -45,11 +45,23 @@ void refreshWindow() {
 }
 
 int main(void) {
+	int x = 0, y = 0;
+
 	/* start program */
 	init();
 	signal(SIGWINCH, resizeHandler);	
 	refreshWindow();
-	getch();	
+	/*getch();*/
+	
+	while(1) {
+		clear();
+		mvprintw(y, x, "x");
+		refresh();
+
+		usleep(DELAY);
+		x++;
+	}
+	
 	/* exit program */
 	cleanup();
 	return 1;	

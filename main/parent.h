@@ -1,3 +1,5 @@
+#define DELAY 30000
+
 int winWidth;
 int winHeight;
 
