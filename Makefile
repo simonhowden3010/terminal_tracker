@@ -25,7 +25,7 @@ all:	$(MAIN)
 
 #$(MAIN): $(OBJS) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
 $(MAIN): $(OBJS) 
-	$(CC) -o $(MAIN) $(OBJS) $(LDFLAGS)
+	$(CC) $(LDFLAGS) $(SRCS) -o $(MAIN)
 clean: 
 	$(RM) *.o *~ $(MAIN)
 

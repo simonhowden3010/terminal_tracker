@@ -1,4 +1,4 @@
-#include "parent.h"
+#include "main.h"
 
 void testFunction() {
 	
