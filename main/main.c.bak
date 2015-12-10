@@ -16,6 +16,7 @@
 #include "main.h"
 
 void init() {
+	printf("Init function\n");
 	initscr();
 	/* cbreak(); */
 	noecho();
@@ -34,52 +35,45 @@ void resizeHandler(int sig) {
 	refreshWindow();
 }
 
-void cleanup( WINDOW *chainWindow,
+void cleanup( WINDOW *field,
 		WINDOW *score
 	) {
 	
 	/* delete windows */
 	delwin(stdscr);
-	delwin(chainWindow);
+	delwin(field);
 	delwin(score);
 
 	endwin();
 	printf("Cleanup function\n");
 }
 
-void refreshWindow( WINDOW *chainWindow, 
+void refreshWindow( WINDOW *field, 
 		WINDOW *score
 	) {
 	
 	/* refresh windows */
-	wrefresh(stdscr);
-	wrefresh(chainWindow);
+	/* wrefresh(stdscr); */
+	wrefresh(field);
 	wrefresh(score);
-}
-
-void drawBorders(WINDOW *screen) {
-	int x, y, i;
 }
 
 int main(void) {
 	int x = 0, y = 0;
+	WINDOW *field = newwin(winHeight - 3, winWidth, 0, 0);
+	WINDOW *score = newwin(3, winWidth, winHeight - 3, 0);
 	
+	/* start program */
 	init();
-
-	WINDOW *chainWindow = newwin(4, winWidth - 1, 0, 1);
-	WINDOW *score = newwin(3, winWidth - 1, winHeight - 3, 1);
-	box(chainWindow, 0, 0);
-	box(score, 0, 0);
 	signal(SIGWINCH, resizeHandler);	
 	
-	mvwprintw(chainWindow, 0, 3, " Chains ");
-	mvwprintw(score, 0, 3, " Score ");
+	mvwprintw(field, 0, 0, "Field");
+	mvwprintw(score, 0, 0, "Score");
 
-	/* attempt at borders */
+	refreshWindow(field, score);
 
-	refreshWindow(chainWindow, score);
-
-	/*getch();*/
+	wrefresh(field);
+	getch();
 	sleep(5);
 /*	
 	while(1) {
@@ -92,6 +86,6 @@ int main(void) {
 	}
 */	
 	/* exit program */
-	cleanup(chainWindow, score);
+	cleanup(field, score);
 	return 1;	
 }
