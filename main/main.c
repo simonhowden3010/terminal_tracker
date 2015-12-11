@@ -34,26 +34,30 @@ void resizeHandler(int sig) {
 	refreshWindow();
 }
 
-void cleanup( WINDOW *chainWindow,
+void cleanup( WINDOW *mainWindow1,
+		WINDOW *mainWindow2,
 		WINDOW *score
 	) {
 	
 	/* delete windows */
 	delwin(stdscr);
-	delwin(chainWindow);
+	delwin(mainWindow1);
+	delwin(mainWindow2);
 	delwin(score);
 
 	endwin();
 	printf("Cleanup function\n");
 }
 
-void refreshWindow( WINDOW *chainWindow, 
+void refreshWindow( WINDOW *mainWindow1, 
+		WINDOW *mainWindow2,
 		WINDOW *score
 	) {
 	
 	/* refresh windows */
 	wrefresh(stdscr);
-	wrefresh(chainWindow);
+	wrefresh(mainWindow1);
+	wrefresh(mainWindow2);
 	wrefresh(score);
 }
 
@@ -66,18 +70,22 @@ int main(void) {
 	
 	init();
 
-	WINDOW *chainWindow = newwin(4, winWidth - 1, 0, 1);
-	WINDOW *score = newwin(3, winWidth - 1, winHeight - 3, 1);
-	box(chainWindow, 0, 0);
+	WINDOW *mainWindow1 = newwin(winHeight-(winHeight/3), (winWidth / 2)-1, 3, 1);
+	WINDOW *mainWindow2 = newwin(winHeight-(winHeight/3), winWidth/2, 3, (winWidth / 2)+1 );
+	WINDOW *score = newwin(winHeight/4.5, winWidth - 1, (winHeight-(winHeight/3))+3, 1);
+	box(mainWindow1, 0, 0);
+	box(mainWindow2, 0, 0);
 	box(score, 0, 0);
 	signal(SIGWINCH, resizeHandler);	
-	
-	mvwprintw(chainWindow, 0, 3, " Chains ");
-	mvwprintw(score, 0, 3, " Score ");
+
+	mvwprintw(stdscr, 1, 2, "MetaTracker v1.0 - Be all you can be");	
+	mvwprintw(mainWindow1, 0, 3, " Window 1 ");
+	mvwprintw(mainWindow2, 0, 3, " Window 2 ");
+	mvwprintw(score, 0, 3, " Window 2 ");
 
 	/* attempt at borders */
 
-	refreshWindow(chainWindow, score);
+	refreshWindow(mainWindow1, mainWindow2, score);
 
 	/*getch();*/
 	sleep(5);
@@ -92,6 +100,6 @@ int main(void) {
 	}
 */	
 	/* exit program */
-	cleanup(chainWindow, score);
+	cleanup(mainWindow1, mainWindow2, score);
 	return 1;	
 }
